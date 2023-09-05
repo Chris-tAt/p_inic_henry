@@ -9,12 +9,19 @@ const URL_API = "https://api.thedogapi.com/v1/breeds";
 
 const cleanInfoApi = (arr) => {
     return arr.map((dog) => {
+        let weightMio = '';
+        const parts = dog.weight.metric.split(" - ");
+        if (isNaN(parseFloat(parts[0]))) {
+             weightMio = "6 - 8";
+            } else {
+                 weightMio = dog.weight.metric;
+                }
     return {
         id: dog.id,
         image: dog.image.url,
         name: dog.name,
         height: dog.height,
-        weight: dog.weight,
+        weight: weightMio,
         years: dog.life_span,
         sourceDB: false,
         temperament: dog.temperament,
