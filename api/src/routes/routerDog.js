@@ -3,7 +3,7 @@ const {createBreedHandler,   getBreedsByIdHandler, getBreedsHandler } = require(
 
 const router = Router();
 
-router.get('/', getBreedsHandler )   
+router.get('/get', getBreedsHandler )   
 router.get('/:id',  getBreedsByIdHandler)
 
 router.post('/', createBreedHandler)

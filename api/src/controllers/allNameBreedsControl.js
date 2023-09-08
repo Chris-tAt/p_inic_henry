@@ -20,10 +20,7 @@ const cleanInfoApi = (arr) => {
         id: dog.id,
         image: dog.image.url,
         name: dog.name,
-        height: dog.height,
         weight: weightMio,
-        years: dog.life_span,
-        sourceDB: false,
         temperament: dog.temperament,
        
     }
@@ -31,14 +28,29 @@ const cleanInfoApi = (arr) => {
 })
 }
 const getAllBreeds = async () => {
-    const DogsDB = await Dog.findAll()
+    const DogsDB = await Dog.findAll({
+        include: {
+            model: Temperaments,
+            attributes: ["name"],
+            through: {
+                attributes: [],
+            },
+        },
+    });
+
     const InfoApi = (await axios.get(`${URL_API}?api_key=${API_KEY}`)).data;
-    const DogsInfoApi = cleanInfoApi(InfoApi)
+    const DogsInfoApi = cleanInfoApi(InfoApi);
 
-    return [...DogsDB,...DogsInfoApi]
+    const formatDataDB = DogsDB.map((raza) => {
+        const temperaments = (raza.dataValues.temperaments || []).map((temp) => temp.name).join(", ");
+        return {
+            ...raza.dataValues,
+            temperament: temperaments || 'No hay temperamentos disponibles'
+        };
+    });
 
+    return [...formatDataDB, ...DogsInfoApi];
 };
-
 const getBreedsOrName = async (name) => {
     const InfoApi = (await axios.get(`${URL_API}?api_key=${API_KEY}`)).data;
     const DogsInfoApi = cleanInfoApi(InfoApi)

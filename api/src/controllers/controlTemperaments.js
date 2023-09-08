@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { Dog, Temperaments } = require('../db');
+const { Temperaments } = require('../db');
 require("dotenv").config();
 const { API_KEY } = process.env;
 const URL_API = "https://api.thedogapi.com/v1/breeds";

@@ -1,12 +1,12 @@
 import React from 'react';
 import "./navbarStyles.css";
 
-const Navbar = () => {
+const Navbar = ({name, handleChangeInput, handleSubmit}) => {
   return (
     <div className='search-box'>
      <form>
-      <input placeholder='Buscar por Nombre' />
-      <button>Buscar</button>
+      <input className='search-name' value={name} onChange={handleChangeInput} type='text' placeholder='Buscar por Nombre..' />
+      <button type='submit' onClick={handleSubmit} className='bt-buscar'>Buscar</button>
      </form>
     </div>
   )

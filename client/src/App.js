@@ -1,4 +1,4 @@
-import './App.css';
+// import './App.css';
 import {Route, Routes} from 'react-router-dom';
 import Home from "./views/home/homeComponent";
 import DetailDog from "./views/detail/detailComponent";
@@ -15,7 +15,7 @@ function App() {
      <Route path="/home" element={<Home/>}/>
      <Route path="/dogs/:id" element={<DetailDog/>}/>
      <Route path="/create" element={<CreateBreed/>}/>
-     <Route path="/about" element={<About/>}/> 
+     <Route path="/about" element={<About/>}/>
 
       </Routes>
     </div>

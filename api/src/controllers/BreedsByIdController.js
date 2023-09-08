@@ -1,6 +1,7 @@
 const axios = require('axios');
-const Dog = require('../models/Dog'); 
-const Temperaments = require('../models/Temperaments'); 
+// const Dog = require('../models/Dog'); 
+// const Temperaments = require('../models/Temperaments'); 
+const {Dog, Temperaments} = require ('../db')
 
 const getDogsByIdFromApi = async (id) => {
     try {
@@ -14,22 +15,32 @@ const getDogsByIdFromApi = async (id) => {
 
 const getDogsByIdFromDatabase = async (id) => {
     try {
-        const resultado = await Dog.findAll({
-            where: {
-                id: id
-            },
+        const resultado = await Dog.findByPk(id, {
             include: Temperaments
         });
 
+        if (!resultado) {
+            return null; 
+        }
+        const formatDataDB = resultado.map((raza) => {
+            const temperaments = (raza.dataValues.temperaments || []).map((temp) => temp.name).join(", ");
+            return {
+                ...raza.dataValues,
+                temperament: temperaments || 'No hay temperamentos disponibles'
+            };
+        });
+
         
-        const listaDogs = resultado.map((dog) => ({
+        const listaDogs = formatDataDB.map((dog) => ({
             id: dog.id,
-            name: dog.name,
-            height: dog.height,
-            weight: dog.weight,
-            life_span: dog.life_span + ' years',
             image: dog.image,
-            temperament: dog.temperaments.map((t) => t.name).join(", ")
+            name: dog.name,
+            height_min: dog.height_min,
+            height_max: dog.height_max,
+            weight_min: dog.weight_min,
+            weight_max: dog.weight_max,
+            life_span: dog.life_span + ' years',
+            temperament: dog.temperament
         }));
 
         return listaDogs;
@@ -40,24 +51,24 @@ const getDogsByIdFromDatabase = async (id) => {
 };
 
 const formatApiData = (apiData) => {
-    let weightRange = '';
-    if (apiData.weight.metric === "NaN") {
-        weightRange = "27 - 34";
-    } else if (apiData.weight.metric.split(" - ")[0] === "NaN") {
-        weightRange = "6 - 8";
-    } else {
-        weightRange = apiData.weight.metric;
-    }
+    
+    const weightParts = (apiData.weight && apiData.weight.metric) ? apiData.weight.metric.split(" - ") : ["No disponible"];
+
+    
+    const heightParts = (apiData.height && apiData.height.metric) ? apiData.height.metric.split(" - ") : ["No disponible"];
 
     const referenceImageId = apiData.reference_image_id;
     const imageUrl = `https://cdn2.thedogapi.com/images/${referenceImageId}.jpg`;
 
     const formattedData = {
+        id: apiData.id,
         image: imageUrl,
         name: apiData.name,
-        temperament: apiData.temperament ? apiData.temperament : 'Perrito sin temperamento',
-        weight: weightRange,
-        height: apiData.height.metric,
+        temperament: apiData.temperament ? apiData.temperament : 'Esta raza no tiene registrado temperamento',
+        height_min: heightParts[0],
+        height_max: heightParts[1],
+        weight_min: weightParts[0],
+        weight_max: weightParts[1],
         life_span: apiData.life_span
     };
 
@@ -66,7 +77,7 @@ const formatApiData = (apiData) => {
 
 
 
-//estas son dos logicas que implemente cuando estaba sin handlers ( una contiene la logica que me enseño gana y otra contiene una logica mas estructurada con formateo)
+//estas son dos logicas que implemente cuando estaba sin handlers ( una contiene la logica que me enseño gama y otra contiene una logica mas estructurada con formateo)
 
 
 // const getBreedsById = async (id, source) => {
