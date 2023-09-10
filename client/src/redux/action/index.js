@@ -21,7 +21,7 @@ const miURL ='http://localhost:3001';
 export const getAllBreedsOrDogs = () => {
   return async (dispatch) => {
     try {
-        const response = await axios(`${miURL}/dogs/get`);
+        const response = await axios(`${miURL}/dogs`);
         return dispatch({
             type: GET_ALL_BREEDS_DOGS,
             payload:response.data
@@ -45,7 +45,7 @@ export const getAllTemperaments = () => async dispatch => {
 export const getDogsName = (name) => {
     return async (dispatch) => {
       try {
-          const response = await axios(`${miURL}/dogs/get?name=${name}`);
+          const response = await axios(`${miURL}/dogs/?name=${name}`);
           return dispatch({
               type: GET_DOG_BY_NAME,
               payload:response.data
@@ -62,7 +62,7 @@ export const getDetailDogs = (id) => {
   
 return async function(dispatch) {
     try {
-        const response = await axios.get(`${miURL}/dogs/${id}`)
+        const response = await axios(`http://localhost:3001/dogs/${id}`)
         return dispatch({
             type: GET_DETAIL,
             payload: response.data

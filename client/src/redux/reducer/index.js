@@ -40,6 +40,7 @@ const reducer = (state = initialState, action) => {
     ...state,
     detailDog: action.payload,
     
+    
   };
   
   case GET_DOG_BY_NAME:

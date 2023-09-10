@@ -8,7 +8,7 @@ import Image from '../../img/pexels-edgar-daniel-hernández-cervantes-3628100.jp
 const DetailDog = () => {
   const dispatch = useDispatch();
   const detailDog = useSelector((store) => store.detailDog);
-  let {id} = useParams();
+  const {id} = useParams();
 
   useEffect(() => {
     dispatch(getDetailDogs(id));

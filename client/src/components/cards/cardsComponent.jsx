@@ -8,7 +8,7 @@ const Cards = ({breed}) => {
     <div className='card-list'>
     
       {breed?.map((dog) => 
-        <Card  key={dog?.id} image={dog?.image} name={dog?.name}  weight={dog?.weight} temperament={dog?.temperament} /> )}
+        <Card  key={dog.id} id={dog.id} image={dog?.image} name={dog?.name}  weight={dog?.weight} temperament={dog?.temperament} /> )}
     </div>
   ) 
 }
