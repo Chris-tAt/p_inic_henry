@@ -1,5 +1,5 @@
 const {createNewBreeds} = require('../controllers/CreateDogsControl');
-const { getDogsByIdFromApi, getDogsByIdFromDatabase, formatApiData} = require('../controllers/BreedsByIdController')
+const { getDogsByIdFromApi, getDogsByIdFromDatabase} = require('../controllers/BreedsByIdController')
 const { getBreedsOrName, getAllBreeds } = require('../controllers/allNameBreedsControl');
 
 const  getBreedsHandler = async (req, res) => {
@@ -19,33 +19,48 @@ const  getBreedsHandler = async (req, res) => {
 };
     
     
-    const getBreedsByIdHandler = async (req, res, next) => {
-        const { id } = req.params;
+const getBreedsByIdHandler = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const apiData = await getDogsByIdFromApi(id);
+        if (!isNaN(id)) {
+            const formatApiData = apiData?.map(dogapi => {
+
+                const weightParts = (dogapi.weight && dogapi.weight.metric) ? dogapi.weight.metric.split(" - ") : ["No disponible"];
+
     
-        try {
-            if (!isNaN(id)) {
-                const apiData = await getDogsByIdFromApi();
-    
-                if (!apiData) {
-                    return res.status(404).send('No se encontró el perrito requerido en la API, inténtelo de nuevo');
-                }
-    
-                const formattedApiData = formatApiData(apiData);
-    
-                return res.json(formattedApiData);
-            } else {
-                const dbData = await getDogsByIdFromDatabase();
-    
-                if (dbData.length === 0) {
-                    return res.status(404).send('No se encontró el perrito requerido en la base de datos, inténtelo de nuevo');
-                }
-    
-                return res.json(dbData);
-            }
-        } catch (error) {
-            next(error);
+                const heightParts = (dogapi.height && dogapi.height.metric) ? dogapi.height.metric.split(" - ") : ["No disponible"];
+            
+                const referenceImageId = dogapi.reference_image_id;
+                const imageUrl = `https://cdn2.thedogapi.com/images/${referenceImageId}.jpg`;
+            
+                const formattedData = {
+                    id: dogapi.id,
+                    image: imageUrl,
+                    name: dogapi.name,
+                    temperament: dogapi.temperament ? dogapi.temperament : 'Esta raza no tiene registrado temperamento',
+                    height_min: heightParts[0],
+                    height_max: heightParts[1],
+                    weight_min: weightParts[0],
+                    weight_max: weightParts[1],
+                    life_span: dogapi.life_span
+                };
+            
+                return formattedData;
+            })
+            formatApiData.length === 0 ? res.status(404).send('No se encontró el perrito requerido en la API, inténtelo de nuevo') : res.send(formatApiData)
+        }else {
+            const dbData = await getDogsByIdFromDatabase(id);
+            return res.json(dbData)
         }
-    };
+       
+        
+
+    } catch (error) {
+        next(error);
+     }
+        };
+
 
     const createBreedHandler = async (req, res) => {
         const {image, name, height_min, height_max, weight_min, weight_max, life_span, sourceDB, temperament} = req.body;

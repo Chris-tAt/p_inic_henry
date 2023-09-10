@@ -1,9 +1,10 @@
 const {Router} = require('express');
-const {createBreedHandler,   getBreedsByIdHandler, getBreedsHandler } = require('../handlers/dogsHandlers')
+const {createBreedHandler, getBreedsHandler, getBreedsByIdHandler } = require('../handlers/dogsHandlers')
+
 
 const router = Router();
 
-router.get('/get', getBreedsHandler )   
+router.get('/', getBreedsHandler )   
 router.get('/:id',  getBreedsByIdHandler)
 
 router.post('/', createBreedHandler)
