@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { Dog, Temperaments } = require('../db');
+const {Op} = require('sequelize')
 require("dotenv").config();
 const { API_KEY } = process.env;
 const URL_API = "https://api.thedogapi.com/v1/breeds";
@@ -53,17 +54,24 @@ const getAllBreeds = async () => {
 };
 const getBreedsOrName = async (name) => {
     const InfoApi = (await axios.get(`${URL_API}?api_key=${API_KEY}`)).data;
-    const DogsInfoApi = cleanInfoApi(InfoApi)
+    const DogsInfoApi = cleanInfoApi(InfoApi);
 
-    const BreedsFiltered = DogsInfoApi.filter(breed => breed.name === name)
+    const BreedsFiltered = DogsInfoApi.filter((breed) =>
+        breed.name.toLowerCase() === name.toLowerCase()
+    );
 
     const breedsDB = await Dog.findAll({
-        where:{ name:name,},
-        include: [Temperaments]
+        where: { name: { [Op.iLike]: `%${name}%` } },
+        include: [Temperaments],
     });
-    return [...BreedsFiltered,...breedsDB];
+    return [...BreedsFiltered, ...breedsDB];
+};
 
-}
+
+
+
+
+
 
 
 
