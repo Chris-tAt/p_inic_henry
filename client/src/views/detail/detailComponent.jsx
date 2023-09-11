@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import "./detailStyles.css";
 import { Link, useParams} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDetailDogs } from '../../redux/action/index';
+import { getDetailDogs, getDetailClean } from '../../redux/action/index';
 import Image from '../../img/pexels-edgar-daniel-hernández-cervantes-3628100.jpg';
 
 const DetailDog = () => {
@@ -12,6 +12,9 @@ const DetailDog = () => {
 
   useEffect(() => {
     dispatch(getDetailDogs(id));
+    return () => {
+      dispatch(getDetailClean())
+    }
   }, [id, dispatch]);
 
   return (
