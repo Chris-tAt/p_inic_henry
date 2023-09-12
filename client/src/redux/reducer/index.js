@@ -3,11 +3,11 @@ import {
     ORDER_ASCEDING_ALPHABETICAL, 
     ORDER_DESCENDING_ALPHABETICAL, 
     ORDER_BY_TEMPE,
-    // FILTER_CREATE,
+    FILTER_CREATE,
     ORDER_WEIGHT_MIN,
     ORDER_WEIGHT_MAX, 
     GET_ALL_BREEDS_DOGS, 
-    // POST_NAME_DOGS, 
+    POST_NEW_DOG, 
     GET_DETAIL_CLEAN,
     GET_DETAIL, 
     GET_TEMPERAMENTS
@@ -16,7 +16,7 @@ import {
 const initialState = {
     breed: [],
     temperaments: [],
-    dogsAllCopi: [],
+    dogsAllCopy: [],
     detailDog: [],
    
 }
@@ -70,12 +70,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         detailDog: action.payload
     }
-//   case POST_NAME_DOGS:
-//   return {
-//     ...state,
-//     dogsAll: [...action.payload],
+  case POST_NEW_DOG:
+  return {
+    ...state,
+    dogsAll: [...action.payload],
     
-//   };
+  };
   case ORDER_ASCEDING_ALPHABETICAL:
     return {
         ...state,
@@ -105,16 +105,16 @@ const reducer = (state = initialState, action) => {
     breed: filterTempe,
     
   };
-//   case FILTER_CREATE:
-//     // const createdFilter = action.payload === 'Creadas'? state.breed.filter(el => el.createdInDb) : state.breed.filter(el=>!el.createdInDb)
+  case FILTER_CREATE:
+    const buscarCreados = action.payload === 'RazasCreadas' ? state.breed.filter(element => element.sourceDB) : state.breed.filter(otroEle=>!otroEle.sourceDB)
             
-//     return {
-//         ...state,
-//         // breed: createdFilter
-//     };
+    return {
+        ...state,
+        breed: buscarCreados
+    };
 
 
-// En tu reducer:
+
 case ORDER_WEIGHT_MIN:
   return {
     ...state,
