@@ -10,7 +10,7 @@ const createNewBreeds = async (image, name, height_min, height_max, weight_min, 
             height_max,
             weight_min,
             weight_max,
-            life_span,
+            life_span: life_span,
             sourceDB
         });
 
