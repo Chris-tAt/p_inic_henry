@@ -69,7 +69,7 @@ const Home = () => {
       </button>
       <SearchDogsName />
 
-      <Link to='/create' id='click'>
+      <Link to='/crear' id='click'>
       <button className='bt-crearRaza'>CREAR RAZA</button>
       </Link>
 

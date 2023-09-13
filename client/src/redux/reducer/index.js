@@ -72,10 +72,10 @@ const reducer = (state = initialState, action) => {
     }
   case POST_NEW_DOG:
   return {
-    ...state,
-    dogsAll: [...action.payload],
-    
-  };
+      ...state,
+      dogsAll: [...state.dogsAll, action.payload],
+    };
+
   case ORDER_ASCEDING_ALPHABETICAL:
     return {
         ...state,

@@ -57,7 +57,7 @@ const errors = {};
     }
   
     if (!breedVali.temperament.length) {
-      errors.temperaments = "Debe seleccionar al menos un temperamento";
+      errors.temperament = "Debe seleccionar al menos un temperamento";
     }
   
     return errors;

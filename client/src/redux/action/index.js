@@ -128,13 +128,13 @@ export const filterCreateBreeds = (breed) => {
 export const postNewDog =  (payload) => {
     return async (dispatch) => {
         try {
-            const response = await axios(`http://localhost:3001/dogs/post`, payload);
+            const response = await axios.post('http://localhost:3001/dogs/', payload)
             return dispatch({
                 type: POST_NEW_DOG,
                 payload:response
             })
         } catch (error) {
-          return alert ('¡Algo salio mal en la creacion!')
+          return alert ('¡Algo salio mal en la creacion! ERROR EN EL SERVIDOR')
       }
      }
   

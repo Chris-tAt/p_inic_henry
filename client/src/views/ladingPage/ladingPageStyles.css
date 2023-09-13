@@ -1,0 +1,157 @@
+/* LandingPage.css */
+.landing-page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: url('../../img/job562-nunoon-10.jpg') repeat;
+    background-size: cover; 
+    overflow: hidden;
+    z-index: 0; 
+  }
+  
+  header {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  h1 {
+    font-size: 36px;
+    color: #333; /* Color de título */
+  }
+  
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+  }
+  
+  .welcome-text {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    color: #555; /* Color de subtítulo */
+  }
+  
+  p {
+    font-size: 18px;
+    color: #777; /* Color del texto */
+  }
+  
+  .button-container {
+    margin-top: 10px;
+  }
+  
+  .paw-button {
+    background-color: #007bff; /* Color de fondo del botón */
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    color: #fff; /* Color del icono del botón */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .paw-button:hover {
+    background-color: #0056b3; /* Color de fondo del botón al pasar el cursor */
+  }
+  
+  
+  
+  @keyframes backgroundMove {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  /* Animación del perro */
+  .moving-dog {
+    position: absolute;
+    bottom: 20px;
+    left: -100px;
+    animation: moveDog 10s linear infinite;
+  }
+  
+  @keyframes moveDog {
+    0% {
+      left: -100px;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  
+  /* Efectos para los iconos */
+  .icon-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .paw-icon {
+    font-size: 36px;
+    transform: rotate(45deg);
+    animation: rotateIcon 5s linear infinite;
+  }
+  
+  .bone-icon {
+    font-size: 36px;
+    animation: scaleIcon 2s alternate infinite;
+  }
+  
+  .star-icon {
+    font-size: 36px;
+    animation: moveIcon 3s linear alternate infinite;
+  }
+  
+  .heart-icon {
+    font-size: 36px;
+    animation: colorChange 2s alternate infinite;
+  }
+  
+  @keyframes rotateIcon {
+    0% {
+      transform: rotate(45deg);
+    }
+    100% {
+      transform: rotate(405deg);
+    }
+  }
+  
+  @keyframes scaleIcon {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.2);
+    }
+  }
+  
+  @keyframes moveIcon {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(20px);
+    }
+  }
+  
+  @keyframes colorChange {
+    0% {
+      color: #ff0000;
+    }
+    100% {
+      color: #00ff00;
+    }
+  }

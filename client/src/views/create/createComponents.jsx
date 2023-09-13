@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { GrFormAdd } from 'react-icons/gr';
 import {BsTrash} from 'react-icons/bs'
 import "./createStyles.css";
@@ -12,6 +12,7 @@ const CreateBreed = () => {
 const dispatch = useDispatch();
 const navigate = useNavigate();
 const breedtemperamentos = useSelector((state) => state.temperaments);
+const tempeRef = useRef();
 
 useEffect(()=> {
 dispatch(getAllTemperaments())
@@ -28,6 +29,7 @@ const [breedDog, setBreedDog] = useState({
 })
 
 const [errors, setErrors] = useState({})
+
 
 const handleBreedDogChange = (event) => {
   event.preventDefault ();
@@ -47,23 +49,43 @@ const handleBreedDogChange = (event) => {
   }
   );
 }
+// const handleAddTemperament = () => {
+//   if (newTemperament.trim() === '') {
+//     return;
+//   }
+//   setBreedDog((prevInput) => ({
+//     ...prevInput,
+//     temperament: [...prevInput.temperament, newTemperament],
+//   }));
+//   setNewTemperament(''); 
+// };
+// const handleRemoveTemperament = (index) => {
+//   setBreedDog((prevInput) => ({
+//     ...prevInput,
+//     temperament: prevInput.temperament.filter((_, i) => i !== index),
+//   }));
+// };
+
+
 const handleSelect = (event) => {
-  const selectedValue = event.target.value;
-  const name = event.target.name;
-  setBreedDog((prevInput) => ({
-     ...prevInput, 
-     temperament: prevInput.temperament.includes(selectedValue)
-        ? prevInput.temperament.filter((value) => value !== selectedValue)
-        : [...prevInput.temperament, selectedValue]
-  }));
-  const validaError = validationBreed({
+  event.preventDefault()
+  const selectedValue = tempeRef.current.value;
+  // const name = event.target.name;
+  setBreedDog({
     ...breedDog,
-    [name]: selectedValue,
+     temperament: !breedDog.temperament.includes(selectedValue)
+        ? [...breedDog.temperament, selectedValue]
+        : breedDog.temperament
   })
-  setErrors({
-     ...errors,
-     [name]: validaError[name],
-  });
+  tempeRef.current.value = ''
+  // const validaError = validationBreed({
+  //   ...breedDog,
+  //   [name]: selectedValue,
+  // })
+  // setErrors({
+  //    ...errors,
+  //    [name]: validaError[name],
+  // });
 }
 
 const handleClear = (event) => {
@@ -75,16 +97,18 @@ const handleClear = (event) => {
 }
 const handleSubmit = (event) => {
   event.preventDefault()
-  if(Object.values(errors).length) {
-    alert('Algo esta Incorrecto en algun Items')
-  }else if (
+  // if(Object.values(errors).length) {
+  //   alert('Algo esta Incorrecto en algun Items')
+  // }else 
+  if (
     breedDog.name === '' ||
     breedDog.height_min === '' ||
     breedDog.height_max === ''||
     breedDog.weight_min === ''||
     breedDog.weight_max === ''||
     breedDog.life_Span === ''||
-    !breedDog.temperament.length) {
+    breedDog.temperament.length === 0
+    ) {
 alert ('Algun Items está sin completar')
     }else {
       dispatch(postNewDog(breedDog))
@@ -96,7 +120,7 @@ alert ('Algun Items está sin completar')
         weight_min: '',
         weight_max: '',
         life_Span: '',
-        temperament: [],
+        temperament:[],
       })
       navigate('/home')
     }
@@ -124,7 +148,7 @@ alert ('Algun Items está sin completar')
             <input name='height_min' type='number' value={breedDog.height_min} onChange={handleBreedDogChange} placeholder='Mín ctms' ></input>
             <small className='stylesHeight'>{errors.height_min}</small>
 
-            <input name='height_max' type='number' value={breedDog.height_max } onChange={handleBreedDogChange}  placeholder='Máx ctms' mts></input>
+            <input name='height_max' type='number' value={breedDog.height_max } onChange={handleBreedDogChange}  placeholder='Máx ctms'></input>
             <small className='stylesHeight'>{errors.height_max}</small>
         </div>
         
@@ -151,28 +175,23 @@ alert ('Algun Items está sin completar')
     </div>
 
     <div className="grupo-formulario">
-    <label><b>Temperament: </b></label><br /><br />
-<small>Elija un temperamentos o cree uno propio</small><br /><br />
-<input
-  list='temperaments'
-  name='temperament'
-  onChange={handleSelect}
-  value={breedDog.temperament}
-></input>
-<button title='Add'><GrFormAdd /></button>
+   
+      
+        <label><b>Temperament: </b></label><br></br>
+<small>Choose a temperament from the dropdown list or enter your own and then click on 'Add'</small><br></br>
+<input list='temperaments' name='temperament' ref={tempeRef}></input>
+<button onClick={e => handleSelect(e)} title='Add'><GrFormAdd/></button>
 <datalist id='temperaments'>
-  {breedtemperamentos.map((e) => (
-    <option value={e} key={e}></option>
-  ))}
+  {breedtemperamentos.map(e => <option value={e} key={e}></option>)}
 </datalist>
 
-<input
-  name='temperament'
-  readOnly='readonly'
-  value={breedDog.temperament}
-></input>
-<button onClick={handleClear} title='Clear' id='remove'><BsTrash /></button><br /><br />
-    </div>
+<input name='temperament' readOnly='readonly' value={breedDog.temperament}></input>
+<button onClick={(e) => handleClear(e)} title='Clear' id='remove'><BsTrash/></button>
+<br></br><br></br>
+      </div>
+
+
+  
 
     <div  className='bt-crearForm'>
       <button type='submit' className='crear-form'>Click aqui para Crear la Raza</button>
