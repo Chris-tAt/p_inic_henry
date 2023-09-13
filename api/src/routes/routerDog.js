@@ -7,6 +7,6 @@ const router = Router();
 router.get('/', getBreedsHandler )   
 router.get('/:id',  getBreedsByIdHandler)
 
-router.post('/post', createBreedHandler)
+router.post('/', createBreedHandler)
 
 module.exports = router;
