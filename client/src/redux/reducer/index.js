@@ -62,7 +62,7 @@ const reducer = (state = initialState, action) => {
   case GET_DOG_BY_NAME:
   return {
     ...state,
-    breed: action.payload,
+    dogsAllCopy: action.payload,
     
   };
   case GET_DETAIL_CLEAN:
@@ -70,47 +70,47 @@ const reducer = (state = initialState, action) => {
         ...state,
         detailDog: action.payload
     }
-  case POST_NEW_DOG:
-  return {
-      ...state,
-      dogsAll: [...state.dogsAll, action.payload],
-    };
+    case POST_NEW_DOG:
+      return {
+        ...state,
+        dogsAllCopy: [...state.dogsAllCopy, action.payload], 
+      };
 
   case ORDER_ASCEDING_ALPHABETICAL:
+    
     return {
         ...state,
-        breed: [...state.breed].sort((a, b) => a.name.localeCompare(b.name))
+        dogsAllCopy: [...state.breed].sort((a, b) => a.name.localeCompare(b.name))
   };
   case ORDER_DESCENDING_ALPHABETICAL:
+    
     return {
         ...state,
-        breed: [...state.breed].sort((a, b) => b.name.localeCompare(a.name))
+        dogsAllCopy: [...state.breed].sort((a, b) => b.name.localeCompare(a.name))
+       
     
   };
   case ORDER_BY_TEMPE:
-    const dogsAllCopy = state.dogsAllCopy;
-    const filterTempe = action.payload === 'All'
-    ? dogsAllCopy
-    : dogsAllCopy.filter((element) => {
-      if(typeof element.temperament === 'string')
-      return element.temperament.includes(action.payload)
-    if(Array.isArray(element.temps)){
-      let temperamentos = element.map((element) => element.name)
-      return temperamentos.includes(action.payload)
-    }
-    return true
-    })
   return {
     ...state,
-    breed: filterTempe,
-    
-  };
+    dogsAllCopy: state.breed.filter(tempe => {
+      if (tempe.temperament) {
+        return tempe.temperament.includes(action.payload); 
+      }
+      return false;
+    })
+  }
+
+
   case FILTER_CREATE:
-    const buscarCreados = action.payload === 'RazasCreadas' ? state.breed.filter(element => element.sourceDB) : state.breed.filter(otroEle=>!otroEle.sourceDB)
-            
+    const dogsCatch = state.dogsAllCopy;
+    const allDos =
+      action.payload === "sourceDB"
+        ? state.breed.filter((dog) => dog.sourceDB)
+        : state.breed.filter((dog) => !dog.sourceDB);
     return {
-        ...state,
-        breed: buscarCreados
+      ...state,
+      dogsAllCopy: action.payload === "all" ? dogsCatch : allDos,
     };
 
 
@@ -118,12 +118,12 @@ const reducer = (state = initialState, action) => {
 case ORDER_WEIGHT_MIN:
   return {
     ...state,
-    breed: sortByWeight([...state.breed], ORDER_WEIGHT_MIN),
+    dogsAllCopy: sortByWeight([...state.breed], ORDER_WEIGHT_MIN),
   };
 case ORDER_WEIGHT_MAX:
   return {
     ...state,
-    breed: sortByWeight([...state.breed], ORDER_WEIGHT_MAX),
+    dogsAllCopy: sortByWeight([...state.breed], ORDER_WEIGHT_MAX),
   };
  
 

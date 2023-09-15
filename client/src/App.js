@@ -5,6 +5,7 @@ import DetailDog from "./views/detail/detailComponent";
 import CreateBreed from "./views/create/createComponents";
 import About from "./views/about/aboutComponent";
 import LadingPage from './views/ladingPage/ladingPageComponent';
+import ListTempe from './views/tempeList/listTempe';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
      <Route path="/home" element={<Home/>}/>
      <Route path="/dogs/:id" element={<DetailDog/>}/>
      <Route path="/crear" element={<CreateBreed/>}/>
+     <Route path="/listTempe/:temperament" element={<ListTempe/>}/>
      <Route path="/about" element={<About/>}/>
 
       </Routes>

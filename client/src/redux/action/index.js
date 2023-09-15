@@ -35,19 +35,34 @@ export const getAllBreedsOrDogs = () => {
 
   }
 };
-export const getAllTemperaments = () => async dispatch => {
-    return await fetch(`${miURL}/temperaments`)
-       .then(respose => respose.json())
-       .then (json => dispatch ({type: GET_TEMPERAMENTS, payload: json}))
-
-}
-
-export const  orderByTempe = (breed) => {
-    return {
-        type: ORDER_BY_TEMPE,
-        payload: breed
+export const getAllTemperaments = () => {
+   return async function(dispatch){
+    try {
+        const response = await axios.get(`${miURL}/temperaments`)
+        return dispatch({
+            type: GET_TEMPERAMENTS,
+            payload:response.data
+        })
+    } catch (error) {
+        return dispatch({
+            type: GET_TEMPERAMENTS,
+            payload:error.response
+        })
     }
+   }
+
 }
+
+
+
+export const orderByTempe = (temperament) => {
+    return  {
+        type: ORDER_BY_TEMPE,
+        payload: temperament
+      }
+  };
+  
+      
 export const getDogsName = (name) => {
     return async (dispatch) => {
       try {
@@ -87,55 +102,55 @@ export const getDetailClean = () => {
 
 }
 
-export const getOrderAsceding = (breed) => {
-    console.log(breed)
+export const getOrderAsceding = (payload) => {
+    
     return {
         type: ORDER_ASCEDING_ALPHABETICAL,
-        payload: breed
+        payload
     }                                        
 
 }
-export const getOrderDescending = (breed) => {
-    console.log(breed)
+export const getOrderDescending = (payload) => {
+    
     return {
         type: ORDER_DESCENDING_ALPHABETICAL,
-        payload: breed
+        payload
     }
 
 }
-export const getWightMin = (breed) => {
+export const getWightMin = (payload) => {
     return {
         type:  ORDER_WEIGHT_MIN,
-        payload: breed
+        payload
     }
 
 }
-export const getWightMax = (breed) => {
+export const getWightMax = (payload) => {
     return {
         type:  ORDER_WEIGHT_MAX,
-        payload: breed
+        payload
     }
 
 }
 
-export const filterCreateBreeds = (breed) => {
+export const filterCreateBreeds = (payload) => {
     return {
-        type:  FILTER_CREATE,
-        payload: breed
+        type: 'FILTER_CREATE',
+        payload
     }
 }
 
-export const postNewDog =  (payload) => {
+export const postNewDog = (payload) => {
     return async (dispatch) => {
-        try {
-            const response = await axios.post('http://localhost:3001/dogs/', payload)
-            return dispatch({
-                type: POST_NEW_DOG,
-                payload:response
-            })
-        } catch (error) {
-          return alert ('¡Algo salio mal en la creacion! ERROR EN EL SERVIDOR')
+      try {
+        const response = await axios.post('http://localhost:3001/dogs/', payload);
+        return dispatch({
+          type: POST_NEW_DOG,
+          payload: response.data, 
+        });
+      } catch (error) {
+        return alert ('¡algo salio mal!') 
+        };
       }
-     }
+    };
   
-  }

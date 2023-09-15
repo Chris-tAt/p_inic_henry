@@ -24,7 +24,7 @@ const [breedDog, setBreedDog] = useState({
   height_max: '',
   weight_min: '',
   weight_max: '',
-  life_Span: '',
+  life_span: '',
   temperament: [],
 })
 
@@ -32,7 +32,7 @@ const [errors, setErrors] = useState({})
 
 
 const handleBreedDogChange = (event) => {
-  event.preventDefault ();
+ 
   const {name, value} = event.target
   setBreedDog({
     ...breedDog,
@@ -49,35 +49,28 @@ const handleBreedDogChange = (event) => {
   }
   );
 }
-// const handleAddTemperament = () => {
-//   if (newTemperament.trim() === '') {
-//     return;
-//   }
-//   setBreedDog((prevInput) => ({
-//     ...prevInput,
-//     temperament: [...prevInput.temperament, newTemperament],
-//   }));
-//   setNewTemperament(''); 
-// };
-// const handleRemoveTemperament = (index) => {
-//   setBreedDog((prevInput) => ({
-//     ...prevInput,
-//     temperament: prevInput.temperament.filter((_, i) => i !== index),
-//   }));
-// };
 
 
 const handleSelect = (event) => {
-  event.preventDefault()
+  event.preventDefault();
   const selectedValue = tempeRef.current.value;
-  // const name = event.target.name;
-  setBreedDog({
-    ...breedDog,
-     temperament: !breedDog.temperament.includes(selectedValue)
-        ? [...breedDog.temperament, selectedValue]
-        : breedDog.temperament
-  })
-  tempeRef.current.value = ''
+
+  // Verificamos si selectedValue ya existe en temperament
+  if (!breedDog.temperament.includes(selectedValue)) {
+    const updatedTemperament =
+      breedDog.temperament.length > 0
+        ? breedDog.temperament + ', ' + selectedValue
+        : selectedValue;
+
+    setBreedDog((prevBreedDog) => ({
+      ...prevBreedDog,
+      temperament: updatedTemperament,
+    }));
+  }
+
+  tempeRef.current.value = '';
+  console.log();
+}
   // const validaError = validationBreed({
   //   ...breedDog,
   //   [name]: selectedValue,
@@ -86,46 +79,54 @@ const handleSelect = (event) => {
   //    ...errors,
   //    [name]: validaError[name],
   // });
-}
+// }
 
 const handleClear = (event) => {
-  event.preventDefault()
+  
   setBreedDog({
     ...breedDog,
     temperament: [],
   })
 }
-const handleSubmit = (event) => {
-  event.preventDefault()
-  // if(Object.values(errors).length) {
-  //   alert('Algo esta Incorrecto en algun Items')
-  // }else 
-  if (
-    breedDog.name === '' ||
-    breedDog.height_min === '' ||
-    breedDog.height_max === ''||
-    breedDog.weight_min === ''||
-    breedDog.weight_max === ''||
-    breedDog.life_Span === ''||
-    breedDog.temperament.length === 0
+
+// // if(Object.values(errors).length) {
+  // //   alert('Algo esta Incorrecto en algun Items')
+  // }else
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  
+    
+    const temperamentsNotArray = breedDog.temperament
+    
+    if (
+      breedDog.name === '' ||
+      breedDog.height_min === '' ||
+      breedDog.height_max === '' ||
+      breedDog.weight_min === '' ||
+      breedDog.weight_max === '' ||
+      breedDog.life_span === '' ||
+      temperamentsNotArray.length === 0
     ) {
-alert ('Algun Items está sin completar')
-    }else {
-      dispatch(postNewDog(breedDog))
-      alert ('Nueva Raza Creada Exitosamente')
+      alert('Algunos campos están incompletos');
+    } else {
+      // console.log('Datos que se enviarán al servidor:', breedDog)
+      dispatch(postNewDog({
+        ...breedDog,
+        temperament: temperamentsNotArray, // Envía el array al backend
+      }));
+      alert('Nueva Raza Creada Exitosamente');
       setBreedDog({
         name: '',
         height_min: '',
         height_max: '',
         weight_min: '',
         weight_max: '',
-        life_Span: '',
-        temperament:[],
-      })
-      navigate('/home')
+        life_span: '',
+        temperament: [],
+      });
+      // navigate('/home');
     }
-  
-}
+  }
 
 
   return (
@@ -168,8 +169,8 @@ alert ('Algun Items está sin completar')
     <div className="grupo-formulario">
         <label><b>¿Cuál es su esperanza de vida?:</b></label>
         <div className="entrada-rango">
-            <input name='life_Span' type='text' value={breedDog.life_Span} onChange={handleBreedDogChange} placeholder='Años de vida'></input>
-            <small className='stylesLifespan'>{errors.life_Span}</small>
+            <input name='life_span' type='text' value={breedDog.life_span} onChange={handleBreedDogChange} placeholder='Años de vida'></input>
+            <small className='stylesLifespan'>{errors.life_span}</small>
         </div>
         
     </div>
@@ -182,7 +183,7 @@ alert ('Algun Items está sin completar')
 <input list='temperaments' name='temperament' ref={tempeRef}></input>
 <button onClick={e => handleSelect(e)} title='Add'><GrFormAdd/></button>
 <datalist id='temperaments'>
-  {breedtemperamentos.map(e => <option value={e} key={e}></option>)}
+  {breedtemperamentos.map(e => <option value={e.name} key={e.id}></option>)}
 </datalist>
 
 <input name='temperament' readOnly='readonly' value={breedDog.temperament}></input>

@@ -46,14 +46,14 @@ const errors = {};
       errors.weight_max = "¡Eso es muy pesado! ingresa un peso logico!";
     }
   
-    if (!breedVali.life_Span) {
-      errors.life_Span = "Por favor, indique la esperanza de vida";
-    } else if (!/^[0-9]\d*(\.\d+)?$/.test(breedVali.life_Span)) {
-      errors.life_Span = "Ingrese solo números enteros o decimales para la esperanza de vida";
-    } else if (breedVali.life_Span < 1) {
-      errors.life_Span = " La esperanza de vida debe ser mayor que 0";
-    } else if (breedVali.life_Span > 29) {
-      errors.life_Span = " la esperanza de vida es demasiado alta";
+    if (!breedVali.life_span) {
+      errors.life_span = "Por favor, indique la esperanza de vida";
+    } else if (!/^[0-9]\d*(\.\d+)?$/.test(breedVali.life_span)) {
+      errors.life_span = "Ingrese solo números enteros o decimales para la esperanza de vida";
+    } else if (breedVali.life_span < 1) {
+      errors.life_span = " La esperanza de vida debe ser mayor que 0";
+    } else if (breedVali.life_span > 29) {
+      errors.life_span = " la esperanza de vida es demasiado alta";
     }
   
     if (!breedVali.temperament.length) {
