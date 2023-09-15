@@ -1,18 +1,23 @@
 
 const { Dog, Temperaments } = require('../db');
 
-const createNewBreeds = async (image, name, height_min, height_max, weight_min, weight_max, life_span, sourceDB, temperament) => {
+const createNewBreeds = async (name, height_min, height_max, weight_min, weight_max, life_span, temperament) => {
     try {
+        const defaultImage = 'default'; 
+        const defaultSourceDB = true;
+
         const newRace = await Dog.create({
-            image,
+            image: defaultImage,
             name,
             height_min,
             height_max,
             weight_min,
             weight_max,
             life_span: life_span,
-            sourceDB
+            sourceDB: defaultSourceDB
         });
+        
+
 
         const temperamentArray = temperament.split(',').map((item) => item.trim());
 
@@ -23,7 +28,7 @@ const createNewBreeds = async (image, name, height_min, height_max, weight_min, 
                     name: element
                 }
             });
-            await newRace.addTemperaments(temperamentDB[0]);
+            await newRace.addTemperaments(temperamentDB);
         }
 
         return "Raza creada exitosamente";
@@ -35,3 +40,7 @@ const createNewBreeds = async (image, name, height_min, height_max, weight_min, 
 module.exports = {
     createNewBreeds
 };
+
+
+
+

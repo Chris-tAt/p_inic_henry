@@ -63,9 +63,9 @@ const getBreedsByIdHandler = async (req, res, next) => {
 
 
     const createBreedHandler = async (req, res) => {
-        const {image, name, height_min, height_max, weight_min, weight_max, life_span, sourceDB, temperament} = req.body;
+        const {name, height_min, height_max, weight_min, weight_max, life_span, temperament} = req.body
         try {
-            const response = await createNewBreeds(image, name, height_min, height_max, weight_min, weight_max, life_span, sourceDB, temperament); 
+            const response = await createNewBreeds(name, height_min, height_max, weight_min, weight_max, life_span, temperament); 
             res.status(201).json(response);
 
         } catch (error) {
